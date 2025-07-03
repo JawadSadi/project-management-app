@@ -1,7 +1,13 @@
-import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./features/auth/LoginPage";
 
-const App = () => {
-  return <div className="text-red-400 w-30 h-20 bg-blue-200">App</div>;
-};
+function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<Navigate to="/login" />} />
+    </Routes>
+  );
+}
 
 export default App;
