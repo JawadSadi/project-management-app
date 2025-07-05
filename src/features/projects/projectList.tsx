@@ -5,6 +5,7 @@ import type { RootState, AppDispatch } from "../../app/store";
 import { deleteProject } from "./projectSlice";
 import EditProjectForm from "./EditProjectForm";
 import type { Project } from "./types";
+import TaskList from "./TaskList";
 
 function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
@@ -33,6 +34,7 @@ function ProjectList() {
                 <div>
                   <h4 className="font-semibold">{project.name}</h4>
                   <p className="text-sm text-gray-600">{project.description}</p>
+                  <TaskList project={project} />
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <button

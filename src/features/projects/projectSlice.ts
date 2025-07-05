@@ -1,6 +1,6 @@
 // src/features/projects/projectSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Project } from "./types";
+import type { Project, Task } from "./types";
 import { v4 as uuidv4 } from "uuid";
 
 interface ProjectState {
@@ -23,6 +23,7 @@ const projectSlice = createSlice({
         id: uuidv4(),
         name: action.payload.name,
         description: action.payload.description,
+        tasks: [],
       };
       state.projects.push(newProject);
     },
@@ -40,9 +41,44 @@ const projectSlice = createSlice({
         project.description = description;
       }
     },
+    addTaskToProject: (
+      state,
+      action: PayloadAction<{ projectId: string; title: string }>
+    ) => {
+      const project = state.projects.find(
+        (p) => p.id === action.payload.projectId
+      );
+      if (project) {
+        const newTask: Task = {
+          id: uuidv4(),
+          title: action.payload.title,
+          completed: false,
+        };
+        project.tasks.push(newTask);
+      }
+    },
+
+    deleteTaskFromProject: (
+      state,
+      action: PayloadAction<{ projectId: string; taskId: string }>
+    ) => {
+      const project = state.projects.find(
+        (p) => p.id === action.payload.projectId
+      );
+      if (project) {
+        project.tasks = project.tasks.filter(
+          (t) => t.id !== action.payload.taskId
+        );
+      }
+    },
   },
 });
 
-export const { addProject, deleteProject, updateProject } =
-  projectSlice.actions;
+export const {
+  addProject,
+  deleteProject,
+  updateProject,
+  addTaskToProject,
+  deleteTaskFromProject,
+} = projectSlice.actions;
 export default projectSlice.reducer;
