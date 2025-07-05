@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginStart, loginSuccess, loginFailure } from "./authSlice";
-import type { RootState, AppDispatch } from "../../app/store";
+import type { AppDispatch, RootState } from "../../app/store";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -9,6 +10,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
   const handleLogin = async () => {
     dispatch(loginStart());
     try {
@@ -19,6 +21,7 @@ function LoginPage() {
             token: "fake-token",
           })
         );
+        navigate("/projects");
       } else {
         throw new Error("Invalid credentials");
       }
