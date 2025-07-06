@@ -36,6 +36,11 @@ function ProjectList() {
                   <p className="text-sm text-gray-600">{project.description}</p>
                   <TaskList project={project} />
                 </div>
+                {project.completed && (
+                  <span className="text-green-600 text-sm font-semibold">
+                    ✔ Completed
+                  </span>
+                )}
                 <div className="flex flex-col items-end gap-2">
                   <button
                     className="text-blue-600"

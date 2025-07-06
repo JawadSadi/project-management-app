@@ -23,6 +23,7 @@ const projectSlice = createSlice({
         id: uuidv4(),
         name: action.payload.name,
         description: action.payload.description,
+        completed: false,
         tasks: [],
       };
       state.projects.push(newProject);
@@ -99,6 +100,8 @@ const projectSlice = createSlice({
         if (task) {
           task.completed = !task.completed;
         }
+        const allDone = project.tasks.every((t) => t.completed);
+        project.completed = allDone;
       }
     },
   },

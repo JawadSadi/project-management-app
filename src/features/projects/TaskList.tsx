@@ -18,6 +18,7 @@ function TaskList({ project }: Props) {
   const [taskTitle, setTaskTitle] = useState("");
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
+  const [filter, setFilter] = useState<"all" | "done" | "undone">("all");
 
   const handleAddTask = () => {
     if (taskTitle.trim()) {
@@ -40,9 +41,41 @@ function TaskList({ project }: Props) {
     }
   };
 
+  const filteredTasks = project.tasks.filter((task) => {
+    if (filter === "done") return task.completed;
+    if (filter === "undone") return !task.completed;
+    return true;
+  });
+
   return (
     <div className="mt-4 border-t pt-4">
       <h4 className="font-bold mb-2">Tasks</h4>
+      <div className="flex gap-2 mb-3">
+        <button
+          className={`px-3 py-1 rounded border ${
+            filter === "all" ? "bg-gray-200" : ""
+          }`}
+          onClick={() => setFilter("all")}
+        >
+          All
+        </button>
+        <button
+          className={`px-3 py-1 rounded border ${
+            filter === "undone" ? "bg-gray-200" : ""
+          }`}
+          onClick={() => setFilter("undone")}
+        >
+          Undone
+        </button>
+        <button
+          className={`px-3 py-1 rounded border ${
+            filter === "done" ? "bg-gray-200" : ""
+          }`}
+          onClick={() => setFilter("done")}
+        >
+          Done
+        </button>
+      </div>
 
       <div className="flex gap-2 mb-3">
         <input
@@ -57,11 +90,11 @@ function TaskList({ project }: Props) {
         </button>
       </div>
 
-      {project.tasks.length === 0 ? (
-        <p className="text-sm text-gray-500">No tasks.</p>
+      {filteredTasks.length === 0 ? (
+        <p className="text-sm text-gray-500">No tasks for this filter.</p>
       ) : (
         <ul className="space-y-2">
-          {project.tasks.map((task) => (
+          {filteredTasks.map((task) => (
             <li
               key={task.id}
               className="flex justify-between items-center border p-2 rounded"
