@@ -71,6 +71,36 @@ const projectSlice = createSlice({
         );
       }
     },
+    updateTaskInProject: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        taskId: string;
+        newTitle: string;
+      }>
+    ) => {
+      const { projectId, taskId, newTitle } = action.payload;
+      const project = state.projects.find((p) => p.id === projectId);
+      if (project) {
+        const task = project.tasks.find((t) => t.id === taskId);
+        if (task) {
+          task.title = newTitle;
+        }
+      }
+    },
+    toggleTaskCompleted: (
+      state,
+      action: PayloadAction<{ projectId: string; taskId: string }>
+    ) => {
+      const { projectId, taskId } = action.payload;
+      const project = state.projects.find((p) => p.id === projectId);
+      if (project) {
+        const task = project.tasks.find((t) => t.id === taskId);
+        if (task) {
+          task.completed = !task.completed;
+        }
+      }
+    },
   },
 });
 
@@ -80,5 +110,7 @@ export const {
   updateProject,
   addTaskToProject,
   deleteTaskFromProject,
+  updateTaskInProject,
+  toggleTaskCompleted,
 } = projectSlice.actions;
 export default projectSlice.reducer;
