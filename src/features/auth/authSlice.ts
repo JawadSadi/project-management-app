@@ -1,38 +1,88 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import type { AuthState, User } from "./types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { User } from "./mockUsers";
+
+interface AuthState {
+  currentUser: User | null;
+  users: User[];
+}
+
+function loadUsers(): User[] {
+  const stored = localStorage.getItem("users");
+  return stored
+    ? JSON.parse(stored)
+    : [
+        {
+          id: "admin-1",
+          username: "admin",
+          password: "1234",
+          name: "Admin",
+          role: "admin",
+        },
+      ];
+}
+
+function saveUsers(users: User[]) {
+  localStorage.setItem("users", JSON.stringify(users));
+}
 
 const initialState: AuthState = {
-  user: null,
-  token: null,
-  loading: false,
-  error: null,
+  currentUser: null,
+  users: loadUsers(),
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginStart(state) {
-      state.loading = true;
-      state.error = null;
+    login: (
+      state,
+      action: PayloadAction<{ username: string; password: string }>
+    ) => {
+      const user = state.users.find(
+        (u) =>
+          u.username === action.payload.username &&
+          u.password === action.payload.password
+      );
+      if (user) {
+        state.currentUser = user;
+        localStorage.setItem("currentUser", JSON.stringify(user));
+      } else {
+        throw new Error("Invalid credentials");
+      }
     },
-    loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
-      state.loading = false;
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+
+    logout: (state) => {
+      state.currentUser = null;
+      localStorage.removeItem("currentUser");
     },
-    loginFailure(state, action: PayloadAction<string>) {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    logout(state) {
-      state.user = null;
-      state.token = null;
+
+    addUser: (
+      state,
+      action: PayloadAction<{
+        username: string;
+        password: string;
+        name: string;
+      }>
+    ) => {
+      const exists = state.users.some(
+        (u) => u.username === action.payload.username
+      );
+      if (!exists) {
+        const newUser: User = {
+          id: crypto.randomUUID(),
+          username: action.payload.username,
+          password: action.payload.password,
+          name: action.payload.name,
+          role: "user",
+        };
+        state.users.push(newUser);
+        saveUsers(state.users);
+      } else {
+        throw new Error("Username already exists");
+      }
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } =
-  authSlice.actions;
+export const { login, logout, addUser } = authSlice.actions;
 export default authSlice.reducer;

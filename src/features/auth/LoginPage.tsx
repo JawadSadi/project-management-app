@@ -1,61 +1,79 @@
+// LoginPage.tsx
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginStart, loginSuccess, loginFailure } from "./authSlice";
-import type { AppDispatch, RootState } from "../../app/store";
+import { login } from "./authSlice";
 import { useNavigate } from "react-router-dom";
+import type { RootState } from "../../app/store";
 
 function LoginPage() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const users = useSelector((state: RootState) => state.auth.users);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleLogin = async () => {
-    dispatch(loginStart());
+
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const selectedUser = users.find((u) => u.id === selectedUserId);
+
+  const handleLogin = () => {
+    if (!selectedUser) {
+      setError("Please select a user");
+      return;
+    }
+
     try {
-      if (email === "jawad.com" && password === "123") {
-        dispatch(
-          loginSuccess({
-            user: { name: "Admin", email },
-            token: "fake-token",
-          })
-        );
-        navigate("/projects");
-      } else {
-        throw new Error("Invalid credentials");
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      dispatch(loginFailure(err.message));
+      dispatch(login({ username: selectedUser.username, password }));
+      navigate("/projects");
+    } catch {
+      setError("Incorrect password");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 border rounded mt-50">
+    <div className="max-w-sm mx-auto mt-20 p-4 border rounded shadow">
       <h2 className="text-xl font-bold mb-4">Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        className="border p-2 w-full mb-2"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        className="border p-2 w-full mb-2"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button
-        className="bg-blue-600 text-white px-4 py-2 w-full"
-        onClick={handleLogin}
-        disabled={loading}
-      >
-        {loading ? "Logging in..." : "Login"}
-      </button>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+
+      <p className="mb-2 text-sm text-gray-600">Select a user:</p>
+      <ul className="space-y-1 mb-4">
+        {users.map((user) => (
+          <li key={user.id}>
+            <button
+              onClick={() => {
+                setSelectedUserId(user.id);
+                setError("");
+              }}
+              className={`w-full text-left px-3 py-1 rounded ${
+                selectedUserId === user.id
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100"
+              }`}
+            >
+              {user.name} ({user.role})
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      {selectedUser && (
+        <>
+          <input
+            className="border p-2 w-full mb-2"
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            className="bg-blue-600 text-white w-full py-2 rounded"
+            onClick={handleLogin}
+          >
+            Login as {selectedUser.name}
+          </button>
+        </>
+      )}
+
+      {error && <p className="text-red-500 mt-3 text-sm">{error}</p>}
     </div>
   );
 }

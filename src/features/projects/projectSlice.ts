@@ -48,7 +48,12 @@ const projectSlice = createSlice({
     },
     addTaskToProject: (
       state,
-      action: PayloadAction<{ projectId: string; title: string }>
+      action: PayloadAction<{
+        projectId: string;
+        title: string;
+        assignedTo: string;
+        deadline: string;
+      }>
     ) => {
       const project = state.projects.find(
         (p) => p.id === action.payload.projectId
@@ -58,6 +63,8 @@ const projectSlice = createSlice({
           id: uuidv4(),
           title: action.payload.title,
           completed: false,
+          assignedTo: action.payload.assignedTo,
+          deadline: action.payload.deadline,
         };
         project.tasks.push(newTask);
       }
