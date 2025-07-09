@@ -1,4 +1,3 @@
-// src/features/projects/projectSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Project, Task } from "./types";
 import { v4 as uuidv4 } from "uuid";
@@ -7,8 +6,13 @@ interface ProjectState {
   projects: Project[];
 }
 
+function loadProjects(): Project[] {
+  const stored = localStorage.getItem("projects");
+  return stored ? JSON.parse(stored) : [];
+}
+
 const initialState: ProjectState = {
-  projects: [],
+  projects: loadProjects(),
 };
 
 const projectSlice = createSlice({
@@ -58,7 +62,6 @@ const projectSlice = createSlice({
         project.tasks.push(newTask);
       }
     },
-
     deleteTaskFromProject: (
       state,
       action: PayloadAction<{ projectId: string; taskId: string }>
@@ -107,6 +110,13 @@ const projectSlice = createSlice({
   },
 });
 
+export const persistProjects = (store: any) => (next: any) => (action: any) => {
+  const result = next(action);
+  const state = store.getState();
+  localStorage.setItem("projects", JSON.stringify(state.projects.projects));
+  return result;
+};
+
 export const {
   addProject,
   deleteProject,
@@ -116,4 +126,5 @@ export const {
   updateTaskInProject,
   toggleTaskCompleted,
 } = projectSlice.actions;
+
 export default projectSlice.reducer;
