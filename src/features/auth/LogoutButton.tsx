@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
 import { logout } from "./authSlice";
 
@@ -15,7 +14,7 @@ function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="bg-red-600 text-white px-3 py-1 rounded absolute top-4 right-4"
+      className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded shadow-sm"
     >
       Logout
     </button>

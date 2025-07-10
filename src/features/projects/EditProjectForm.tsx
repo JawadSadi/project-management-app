@@ -26,7 +26,7 @@ function EditProjectForm({ project, onClose }: Props) {
       <h3 className="font-bold mb-2">Edit Project</h3>
       <input
         type="text"
-        className="border p-2 w-full mb-2"
+        className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />

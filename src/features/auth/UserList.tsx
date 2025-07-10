@@ -50,21 +50,21 @@ function UserList() {
             {editingUserId === user.id ? (
               <div className="flex flex-col w-full gap-2">
                 <input
-                  className="border p-1"
+                  className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
                 />
                 <input
-                  className="border p-1"
+                  className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
                   value={formData.username}
                   onChange={(e) =>
                     setFormData({ ...formData, username: e.target.value })
                   }
                 />
                 <input
-                  className="border p-1"
+                  className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })

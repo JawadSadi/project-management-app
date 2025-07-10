@@ -97,7 +97,9 @@ function TaskList({ project }: Props) {
           {filteredTasks.map((task) => (
             <li
               key={task.id}
-              className="flex justify-between items-center border p-2 rounded"
+              className={`p-2 border rounded ${
+                task.completed ? "bg-green-50" : "flex"
+              }`}
             >
               {editingTaskId === task.id ? (
                 <div className="flex w-full gap-2">
@@ -137,36 +139,38 @@ function TaskList({ project }: Props) {
                     />
                     <span
                       className={`${
-                        task.completed ? "line-through text-gray-500" : ""
+                        task.completed ? "line-through text-green-600" : ""
                       }`}
                     >
                       {task.title}
                     </span>
                   </label>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        setEditingTaskId(task.id);
-                        setEditingTitle(task.title);
-                      }}
-                      className="text-blue-500 text-sm"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          deleteTaskFromProject({
-                            projectId: project.id,
-                            taskId: task.id,
-                          })
-                        )
-                      }
-                      className="text-red-500 text-sm"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  {!task.completed && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingTaskId(task.id);
+                          setEditingTitle(task.title);
+                        }}
+                        className="text-blue-500 text-sm"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            deleteTaskFromProject({
+                              projectId: project.id,
+                              taskId: task.id,
+                            })
+                          )
+                        }
+                        className="text-red-500 text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </li>

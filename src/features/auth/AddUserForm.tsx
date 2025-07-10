@@ -33,19 +33,19 @@ function AddUserForm() {
       <h3 className="font-bold mb-2">Add New User</h3>
       {message && <p className="text-sm text-blue-600 mb-2">{message}</p>}
       <input
-        className="border p-2 w-full mb-2"
+        className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
         placeholder="Full Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
       <input
-        className="border p-2 w-full mb-2"
+        className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
-        className="border p-2 w-full mb-2"
+        className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
         placeholder="Password"
         type="password"
         value={password}

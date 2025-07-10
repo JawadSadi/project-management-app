@@ -31,8 +31,8 @@ function LoginPage() {
   };
 
   return (
-    <div className="max-w-sm mx-auto mt-20 p-4 border rounded shadow">
-      <h2 className="text-xl font-bold mb-4">Login</h2>
+    <div className="max-w-sm mx-auto mt-20 p-6 border border-gray-200 rounded-xl shadow-sm bg-white">
+      <h2 className="text-2xl font-bold mb-4 text-center">Sign in</h2>
 
       <p className="mb-2 text-sm text-gray-600">Select a user:</p>
       <ul className="space-y-1 mb-4">
@@ -58,14 +58,14 @@ function LoginPage() {
       {selectedUser && (
         <>
           <input
-            className="border p-2 w-full mb-2"
+            className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring focus:ring-blue-200"
             type="password"
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
-            className="bg-blue-600 text-white w-full py-2 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow-sm"
             onClick={handleLogin}
           >
             Login as {selectedUser.name}

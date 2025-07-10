@@ -30,10 +30,10 @@ function ProjectList() {
         <ul className="space-y-2">
           {projects.map((project) => (
             <li key={project.id} className="border p-4 rounded">
-              <div className="flex justify-between items-start gap-4">
+              <div className="border p-4 rounded-lg shadow-sm hover:shadow-md transition">
                 <div>
-                  <h4 className="font-semibold">{project.name}</h4>
-                  <p className="text-sm text-gray-600">{project.description}</p>
+                  <h4 className="font-semibold text-lg mb-2">{project.name}</h4>
+                  <p className="text-gray-500 text-sm">{project.description}</p>
                   <TaskList project={project} />
                 </div>
                 {project.completed && (
