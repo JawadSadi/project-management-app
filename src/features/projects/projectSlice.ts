@@ -117,6 +117,7 @@ const projectSlice = createSlice({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const persistProjects = (store: any) => (next: any) => (action: any) => {
   const result = next(action);
   const state = store.getState();

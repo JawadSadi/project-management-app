@@ -81,8 +81,31 @@ const authSlice = createSlice({
         throw new Error("Username already exists");
       }
     },
+    updateUser: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        name: string;
+        username: string;
+        password: string;
+      }>
+    ) => {
+      const user = state.users.find((u) => u.id === action.payload.id);
+      if (user) {
+        user.name = action.payload.name;
+        user.username = action.payload.username;
+        user.password = action.payload.password;
+        saveUsers(state.users);
+      }
+    },
+
+    deleteUser: (state, action: PayloadAction<string>) => {
+      state.users = state.users.filter((u) => u.id !== action.payload);
+      saveUsers(state.users);
+    },
   },
 });
 
-export const { login, logout, addUser } = authSlice.actions;
+export const { login, logout, addUser, updateUser, deleteUser } =
+  authSlice.actions;
 export default authSlice.reducer;

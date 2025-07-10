@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./app/store";
-
 import LoginPage from "./features/auth/LoginPage";
 import AddProjectForm from "./features/projects/AddProjectForm";
 import ProjectList from "./features/projects/projectList";
 import LogoutButton from "./features/auth/LogoutButton";
 import AddUserForm from "./features/auth/AddUserForm";
+import UserList from "./features/auth/UserList";
 
 function App() {
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
@@ -23,7 +23,7 @@ function App() {
               <LogoutButton />
               {currentUser.role === "admin" && (
                 <>
-                  <AddUserForm /> <AddProjectForm />
+                  <AddUserForm /> <UserList /> <AddProjectForm />
                 </>
               )}
               <ProjectList />
