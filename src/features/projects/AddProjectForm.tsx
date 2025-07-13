@@ -7,6 +7,7 @@ function AddProjectForm() {
   const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState<string>("");
 
   const handleAdd = () => {
     if (name.trim()) {
@@ -32,6 +33,15 @@ function AddProjectForm() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <label className="block mb-2">
+        Deadline:
+        <input
+          type="datetime-local"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="border p-2 w-full"
+        />
+      </label>
       <button
         onClick={handleAdd}
         className="bg-green-600 text-white px-4 py-2 rounded"

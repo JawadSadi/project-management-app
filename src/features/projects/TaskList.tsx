@@ -25,17 +25,21 @@ function TaskList({ project }: Props) {
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const isAdmin = currentUser?.role === "admin";
 
+  const [deadline, setDeadline] = useState<string>("");
+
   const handleAddTask = () => {
-    if (taskTitle.trim() && (isAdmin ? assignedTo : true)) {
+    if (taskTitle.trim()) {
       dispatch(
         addTaskToProject({
           projectId: project.id,
           title: taskTitle,
-          assignedTo: isAdmin ? assignedTo : currentUser!.id,
+          assignedTo,
+          deadline,
         })
       );
       setTaskTitle("");
       setAssignedTo("");
+      setDeadline("");
     }
   };
 
@@ -92,11 +96,11 @@ function TaskList({ project }: Props) {
       </div>
 
       {isAdmin && (
-        <div className="flex gap-2 mb-3">
+        <div className="flex gap-2 mb-3 flex-wrap">
           <input
             type="text"
             placeholder="New task"
-            className="border p-2 flex-1"
+            className="border p-2 flex-1 min-w-[200px]"
             value={taskTitle}
             onChange={(e) => setTaskTitle(e.target.value)}
           />
@@ -114,6 +118,13 @@ function TaskList({ project }: Props) {
                 </option>
               ))}
           </select>
+          <input
+            type="date"
+            className="border p-2"
+            value={deadline}
+            onChange={(e) => setDeadline(e.target.value)}
+            min={new Date().toISOString().split("T")[0]} // جلوگیری از انتخاب تاریخ گذشته
+          />
           <button
             className="bg-blue-600 text-white px-3"
             onClick={handleAddTask}
@@ -178,6 +189,13 @@ function TaskList({ project }: Props) {
                       }`}
                     >
                       {task.title}
+                      <span className="block text-xs text-gray-500">
+                        {task.deadline
+                          ? `Deadline: ${new Date(
+                              task.deadline
+                            ).toLocaleDateString()}`
+                          : "No deadline"}
+                      </span>
                     </span>
                   </label>
 

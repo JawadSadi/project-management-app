@@ -21,7 +21,11 @@ const projectSlice = createSlice({
   reducers: {
     addProject: (
       state,
-      action: PayloadAction<{ name: string; description: string }>
+      action: PayloadAction<{
+        name: string;
+        description: string;
+        deadline?: string;
+      }>
     ) => {
       const newProject: Project = {
         id: uuidv4(),
@@ -29,6 +33,7 @@ const projectSlice = createSlice({
         description: action.payload.description,
         completed: false,
         tasks: [],
+        deadline: action.payload.deadline,
       };
       state.projects.push(newProject);
     },
@@ -37,13 +42,19 @@ const projectSlice = createSlice({
     },
     updateProject: (
       state,
-      action: PayloadAction<{ id: string; name: string; description: string }>
+      action: PayloadAction<{
+        id: string;
+        name: string;
+        description: string;
+        deadline?: string;
+      }>
     ) => {
-      const { id, name, description } = action.payload;
+      const { id, name, description, deadline } = action.payload;
       const project = state.projects.find((p) => p.id === id);
       if (project) {
         project.name = name;
         project.description = description;
+        project.deadline = deadline;
       }
     },
     addTaskToProject: (
@@ -51,7 +62,8 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId: string;
         title: string;
-        assignedTo: string;
+        assignedTo?: string;
+        deadline?: string;
       }>
     ) => {
       const project = state.projects.find(
@@ -63,10 +75,12 @@ const projectSlice = createSlice({
           title: action.payload.title,
           completed: false,
           assignedTo: action.payload.assignedTo,
+          deadline: action.payload.deadline,
         };
         project.tasks.push(newTask);
       }
     },
+
     deleteTaskFromProject: (
       state,
       action: PayloadAction<{ projectId: string; taskId: string }>

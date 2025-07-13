@@ -13,6 +13,7 @@ function EditProjectForm({ project, onClose }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState(project.name);
   const [description, setDescription] = useState(project.description);
+  const [deadline, setDeadline] = useState<string>("");
 
   const handleUpdate = () => {
     if (name.trim()) {
@@ -35,6 +36,15 @@ function EditProjectForm({ project, onClose }: Props) {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <label className="block mb-2">
+        Deadline:
+        <input
+          type="datetime-local"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="border p-2 w-full"
+        />
+      </label>
       <div className="flex justify-between">
         <button
           className="bg-green-600 text-white px-4 py-2 rounded"
