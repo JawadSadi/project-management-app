@@ -52,7 +52,6 @@ const projectSlice = createSlice({
         projectId: string;
         title: string;
         assignedTo: string;
-        deadline: string;
       }>
     ) => {
       const project = state.projects.find(
@@ -64,7 +63,6 @@ const projectSlice = createSlice({
           title: action.payload.title,
           completed: false,
           assignedTo: action.payload.assignedTo,
-          deadline: action.payload.deadline,
         };
         project.tasks.push(newTask);
       }
@@ -109,9 +107,11 @@ const projectSlice = createSlice({
         const task = project.tasks.find((t) => t.id === taskId);
         if (task) {
           task.completed = !task.completed;
+
+          const allDone =
+            project.tasks.length > 0 && project.tasks.every((t) => t.completed);
+          project.completed = allDone;
         }
-        const allDone = project.tasks.every((t) => t.completed);
-        project.completed = allDone;
       }
     },
   },

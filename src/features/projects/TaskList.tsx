@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Project } from "./types";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../app/store";
 import {
   addTaskToProject,
   deleteTaskFromProject,
@@ -19,11 +19,23 @@ function TaskList({ project }: Props) {
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
   const [filter, setFilter] = useState<"all" | "done" | "undone">("all");
+  const [assignedTo, setAssignedTo] = useState("");
+
+  const users = useSelector((state: RootState) => state.auth.users);
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+  const isAdmin = currentUser?.role === "admin";
 
   const handleAddTask = () => {
-    if (taskTitle.trim()) {
-      dispatch(addTaskToProject({ projectId: project.id, title: taskTitle }));
+    if (taskTitle.trim() && (isAdmin ? assignedTo : true)) {
+      dispatch(
+        addTaskToProject({
+          projectId: project.id,
+          title: taskTitle,
+          assignedTo: isAdmin ? assignedTo : currentUser!.id,
+        })
+      );
       setTaskTitle("");
+      setAssignedTo("");
     }
   };
 
@@ -42,6 +54,7 @@ function TaskList({ project }: Props) {
   };
 
   const filteredTasks = project.tasks.filter((task) => {
+    if (!isAdmin && task.assignedTo !== currentUser?.id) return false;
     if (filter === "done") return task.completed;
     if (filter === "undone") return !task.completed;
     return true;
@@ -50,6 +63,7 @@ function TaskList({ project }: Props) {
   return (
     <div className="mt-4 border-t pt-4">
       <h4 className="font-bold mb-2">Tasks</h4>
+
       <div className="flex gap-2 mb-3">
         <button
           className={`px-3 py-1 rounded border ${
@@ -77,18 +91,37 @@ function TaskList({ project }: Props) {
         </button>
       </div>
 
-      <div className="flex gap-2 mb-3">
-        <input
-          type="text"
-          placeholder="New task"
-          className="border p-2 flex-1"
-          value={taskTitle}
-          onChange={(e) => setTaskTitle(e.target.value)}
-        />
-        <button className="bg-blue-600 text-white px-3" onClick={handleAddTask}>
-          Add
-        </button>
-      </div>
+      {isAdmin && (
+        <div className="flex gap-2 mb-3">
+          <input
+            type="text"
+            placeholder="New task"
+            className="border p-2 flex-1"
+            value={taskTitle}
+            onChange={(e) => setTaskTitle(e.target.value)}
+          />
+          <select
+            className="border p-2"
+            value={assignedTo}
+            onChange={(e) => setAssignedTo(e.target.value)}
+          >
+            <option value="">Assign to...</option>
+            {users
+              .filter((u) => u.role === "user")
+              .map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name}
+                </option>
+              ))}
+          </select>
+          <button
+            className="bg-blue-600 text-white px-3"
+            onClick={handleAddTask}
+          >
+            Add
+          </button>
+        </div>
+      )}
 
       {filteredTasks.length === 0 ? (
         <p className="text-sm text-gray-500">No tasks for this filter.</p>
@@ -97,8 +130,8 @@ function TaskList({ project }: Props) {
           {filteredTasks.map((task) => (
             <li
               key={task.id}
-              className={`p-2 border rounded ${
-                task.completed ? "bg-green-50" : "flex"
+              className={`p-2 border rounded flex justify-between items-center ${
+                task.completed ? "bg-green-50" : ""
               }`}
             >
               {editingTaskId === task.id ? (
@@ -125,18 +158,20 @@ function TaskList({ project }: Props) {
               ) : (
                 <>
                   <label className="flex items-center gap-2 flex-1">
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={() =>
-                        dispatch(
-                          toggleTaskCompleted({
-                            projectId: project.id,
-                            taskId: task.id,
-                          })
-                        )
-                      }
-                    />
+                    {!isAdmin && task.assignedTo === currentUser?.id && (
+                      <input
+                        type="checkbox"
+                        checked={task.completed}
+                        onChange={() =>
+                          dispatch(
+                            toggleTaskCompleted({
+                              projectId: project.id,
+                              taskId: task.id,
+                            })
+                          )
+                        }
+                      />
+                    )}
                     <span
                       className={`${
                         task.completed ? "line-through text-green-600" : ""
@@ -145,7 +180,16 @@ function TaskList({ project }: Props) {
                       {task.title}
                     </span>
                   </label>
-                  {!task.completed && (
+
+                  {isAdmin && (
+                    <span className="text-xs text-gray-500">
+                      👤{" "}
+                      {users.find((u) => u.id === task.assignedTo)?.name ||
+                        "Unknown"}
+                    </span>
+                  )}
+
+                  {isAdmin && !task.completed && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => {

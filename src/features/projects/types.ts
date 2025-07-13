@@ -3,7 +3,6 @@ export interface Task {
   title: string;
   completed: boolean;
   assignedTo: string;
-  deadline: string;
 }
 export interface Project {
   id: string;
@@ -11,10 +10,4 @@ export interface Project {
   description: string;
   completed: boolean;
   tasks: Task[];
-}
-
-export interface User {
-  id: string;
-  name: string;
-  role: "admin" | "user";
 }
