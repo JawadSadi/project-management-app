@@ -11,7 +11,7 @@ function AddProjectForm() {
 
   const handleAdd = () => {
     if (name.trim()) {
-      dispatch(addProject({ name, description }));
+      dispatch(addProject({ name, description, deadline }));
       setName("");
       setDescription("");
     }

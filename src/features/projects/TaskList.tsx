@@ -8,6 +8,7 @@ import {
   updateTaskInProject,
   toggleTaskCompleted,
 } from "./projectSlice";
+import Countdown from "../../components/Countsdown";
 
 interface Props {
   project: Project;
@@ -189,13 +190,11 @@ function TaskList({ project }: Props) {
                       }`}
                     >
                       {task.title}
-                      <span className="block text-xs text-gray-500">
-                        {task.deadline
-                          ? `Deadline: ${new Date(
-                              task.deadline
-                            ).toLocaleDateString()}`
-                          : "No deadline"}
-                      </span>
+                      {task.deadline && (
+                        <div className="text-xs text-gray-500 mt-1">
+                          Deadline: <Countdown targetDate={task.deadline} />
+                        </div>
+                      )}
                     </span>
                   </label>
 

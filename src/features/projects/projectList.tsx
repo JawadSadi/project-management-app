@@ -5,6 +5,7 @@ import { deleteProject } from "./projectSlice";
 import EditProjectForm from "./EditProjectForm";
 import type { Project } from "./types";
 import TaskList from "./TaskList";
+import Countdown from "../../components/Countsdown";
 
 function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
@@ -45,6 +46,11 @@ function ProjectList() {
                   <p className="text-gray-500 text-sm">{project.description}</p>
                 </div>
 
+                {project.deadline && (
+                  <div className="text-sm mt-1">
+                    Deadline: <Countdown targetDate={project.deadline} />
+                  </div>
+                )}
                 {project.completed && (
                   <span className="text-green-600 text-sm font-semibold bg-green-100 px-2 py-1 rounded">
                     ✅ Completed
