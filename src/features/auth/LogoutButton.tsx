@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "./authSlice";
+import Button from "../../components/Button";
 
 function LogoutButton() {
   const dispatch = useDispatch();
@@ -12,12 +13,11 @@ function LogoutButton() {
   };
 
   return (
-    <button
+    <Button
+      label="Logout"
       onClick={handleLogout}
-      className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded shadow-sm"
-    >
-      Logout
-    </button>
+      className="text-red-800 font-bold hover:text-black"
+    />
   );
 }
 

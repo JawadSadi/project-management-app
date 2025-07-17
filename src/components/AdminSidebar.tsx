@@ -2,18 +2,16 @@ import { NavLink } from "react-router-dom";
 
 function AdminSidebar() {
   return (
-    <aside className="w-64 min-h-screen bg-white shadow-md border-r px-4 py-6 hidden md:block">
-      <h2 className="text-xl font-bold mb-6 text-blue-600">Admin Panel</h2>
+    <aside className="w-64 min-h-screen bg-blue-900 shadow-md border-r px-4 py-6 hidden md:block">
+      <h2 className="text-xl font-bold mb-6 ml-4 text-white">Admin Panel</h2>
 
       <nav className="flex flex-col space-y-3">
         <NavLink
           to="/projects"
           end
           className={({ isActive }) =>
-            `block px-3 py-2 rounded hover:bg-blue-50 ${
-              isActive
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "text-gray-700"
+            `block px-3 py-2 rounded hover:bg-blue-700 ${
+              isActive ? "bg-blue-950 text-white font-semibold" : "text-white"
             }`
           }
         >
@@ -23,10 +21,8 @@ function AdminSidebar() {
         <NavLink
           to="/projects/add-user"
           className={({ isActive }) =>
-            `block px-3 py-2 rounded hover:bg-blue-50 ${
-              isActive
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "text-gray-700"
+            `block px-3 py-2 rounded hover:bg-blue-700 ${
+              isActive ? "bg-blue-950 text-white font-semibold" : "text-white"
             }`
           }
         >
@@ -36,10 +32,8 @@ function AdminSidebar() {
         <NavLink
           to="/projects/user-list"
           className={({ isActive }) =>
-            `block px-3 py-2 rounded hover:bg-blue-50 ${
-              isActive
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "text-gray-700"
+            `block px-3 py-2 rounded hover:bg-blue-700 ${
+              isActive ? "bg-blue-950 text-white font-semibold" : "text-white"
             }`
           }
         >
@@ -49,10 +43,8 @@ function AdminSidebar() {
         <NavLink
           to="/projects/add-project"
           className={({ isActive }) =>
-            `block px-3 py-2 rounded hover:bg-blue-50 ${
-              isActive
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "text-gray-700"
+            `block px-3 py-2 rounded hover:bg-blue-700 ${
+              isActive ? "bg-blue-950 text-white font-semibold" : "text-white"
             }`
           }
         >

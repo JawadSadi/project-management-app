@@ -6,6 +6,9 @@ import EditProjectForm from "./EditProjectForm";
 import type { Project } from "./types";
 import TaskList from "./TaskList";
 import Countdown from "../../components/Countsdown";
+import Button from "../../components/Button";
+import { AiFillDelete } from "react-icons/ai";
+import { TiEdit } from "react-icons/ti";
 
 function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
@@ -16,8 +19,7 @@ function ProjectList() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold">Project List</h2>
-
+      <h2 className="text-xl font-bold text-white">Projects List</h2>
       {editingProject && (
         <EditProjectForm
           project={editingProject}
@@ -26,9 +28,9 @@ function ProjectList() {
       )}
 
       {projects.length === 0 ? (
-        <p className="text-gray-500">No projects yet.</p>
+        <p className="text-white text-4xl">No projects yet.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-2 ">
           {projects.map((project) => (
             <li
               key={project.id}
@@ -36,14 +38,21 @@ function ProjectList() {
                 ${
                   project.completed
                     ? "bg-green-50 border-green-400"
-                    : "bg-white"
+                    : "bg-sky-200 "
                 }
               `}
             >
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h4 className="font-semibold text-lg">{project.name}</h4>
-                  <p className="text-gray-500 text-sm">{project.description}</p>
+                  <h4 className="font-semibold text-lg mb-6">
+                    Project Name : {project.name}
+                  </h4>
+                  <p className="text-gray-700 text-l ">
+                    Description :{" "}
+                    <span className="[letter-spacing:1px]">
+                      {project.description}
+                    </span>
+                  </p>
                 </div>
 
                 {project.deadline && (
@@ -61,19 +70,17 @@ function ProjectList() {
               <TaskList project={project} />
 
               {isAdmin && (
-                <div className="flex gap-4 justify-end mt-4">
-                  <button
-                    className="text-blue-600 hover:underline"
+                <div className="flex gap-4 justify-end mt-4 items-center">
+                  <TiEdit
+                    size={32}
                     onClick={() => setEditingProject(project)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="text-red-600 hover:underline"
+                    className="cursor-pointer"
+                  />
+                  <AiFillDelete
+                    size={28}
+                    className="text-red-800 cursor-pointer"
                     onClick={() => dispatch(deleteProject(project.id))}
-                  >
-                    Delete
-                  </button>
+                  />
                 </div>
               )}
             </li>
